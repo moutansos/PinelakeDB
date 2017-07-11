@@ -17,6 +17,17 @@ func TestAddField(t *testing.T) {
 	}
 }
 
+func TestGetOrdinal(t *testing.T) {
+	var table CsvStorageEngineTable
+	table.fieldNames = []string{"Test1", "Test2", "Test3"}
+	i, err := table.GetOrdinal("Test3")
+	if err != nil {
+		t.Error(err)
+	} else if *i != 2 {
+		t.Error("Invalid ordinal returned")
+	}
+}
+
 func TestRemoveField(t *testing.T) {
 	var table CsvStorageEngineTable
 	table.fieldNames = []string{"Test1", "Test2", "Test3"}
