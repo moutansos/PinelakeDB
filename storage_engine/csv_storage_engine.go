@@ -1,7 +1,12 @@
 package storage_engine
 
+import (
+	"encoding/json"
+	"io/ioutil"
+)
+
 type CsvStorageEngine struct {
-	MasterFilePath string
+	MasterFilePath string `json:"-"` //Don't write this field to file
 }
 
 // NewCsvStorageEngine creates a new storage engine with a csv backend at the specified path
@@ -9,4 +14,16 @@ func NewCsvStorageEngine(pathOfMaster string) (*CsvStorageEngine, error) {
 	var se CsvStorageEngine
 	se.MasterFilePath = pathOfMaster
 	return &se, nil
+}
+
+func writeEngineMasterFile(e *CsvStorageEngine) error {
+	data, err := json.Marshal(e)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(e.MasterFilePath, data, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
