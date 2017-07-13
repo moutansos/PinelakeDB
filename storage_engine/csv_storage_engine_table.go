@@ -5,16 +5,25 @@ import (
 )
 
 type CsvStorageEngineTable struct {
-	ID         string
-	FilePath   string
-	fieldNames []string
+	ID         string   `json:"id"`
+	FilePath   string   `json:"filePath"`
+	FieldNames []string `json:"fieldNames"`
+}
+
+// NewCsvStorageEngineTable returns a new csv storage engine table
+func NewCsvStorageEngineTable(name string) (*CsvStorageEngineTable, error) {
+	//TODO: Validate name
+	var newTable CsvStorageEngineTable
+	newTable.ID = name
+	//newTable.FilePath = csvFile
+	return &newTable, nil
 }
 
 // AddField adds a new field or column to the csv storage engine table
 func (t *CsvStorageEngineTable) AddField(name string) error {
 	//TODO: name validation
 	//TODO: shift all columns to accomidate
-	t.fieldNames = append(t.fieldNames, name)
+	t.FieldNames = append(t.FieldNames, name)
 	return nil
 }
 
@@ -25,13 +34,13 @@ func (t *CsvStorageEngineTable) RemoveField(name string) error {
 		return err
 	}
 
-	t.fieldNames = append(t.fieldNames[:*ord], t.fieldNames[*ord+1:]...)
+	t.FieldNames = append(t.FieldNames[:*ord], t.FieldNames[*ord+1:]...)
 	return nil
 }
 
 // GetOrdinal gets the index of the field or column with the given name
 func (t *CsvStorageEngineTable) GetOrdinal(name string) (*int, error) {
-	for i, field := range t.fieldNames {
+	for i, field := range t.FieldNames {
 		if field == name {
 			return &i, nil
 		}
