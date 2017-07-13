@@ -2,6 +2,7 @@ package storage_engine
 
 import (
 	"errors"
+	"path"
 )
 
 type CsvStorageEngineTable struct {
@@ -46,4 +47,10 @@ func (t *CsvStorageEngineTable) GetOrdinal(name string) (*int, error) {
 		}
 	}
 	return nil, errors.New("Invalid field name")
+}
+
+func (t *CsvStorageEngineTable) genTableFileName(mainFolderPath string) error {
+	dir := path.Join(mainFolderPath, t.ID) //TODO: Add csv extension
+	t.FilePath = dir
+	return nil
 }
