@@ -1,4 +1,4 @@
-package storage_engine
+package csv_storage_engine
 
 import (
 	"os"
