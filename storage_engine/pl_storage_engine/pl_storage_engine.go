@@ -1,8 +1,11 @@
 package pl_storage_engine
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	"path"
 )
 
@@ -32,4 +35,15 @@ func writeEngineMasterFile(e *PlStorageEngine) error {
 		return err
 	}
 	return nil
+}
+
+func (se *PlStorageEngine) Insert(f *os.File, row PlStorageEngineRow) (n int, err error) {
+	f.Seek(0, 0)
+	buf := new(bytes.Buffer)
+	err = binary.Write(buf, binary.LittleEndian, &row)
+	if err != nil {
+		return 0, err
+	}
+	n, err = f.Write(buf.Bytes())
+	return n, err
 }
