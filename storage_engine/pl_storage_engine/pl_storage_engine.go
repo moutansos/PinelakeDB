@@ -21,7 +21,7 @@ func NewPlStorageEngine(MasterFolder string) (*PlStorageEngine, error) {
 	return &se, nil
 }
 
-func writeEngineMasterFile(e *PlStorageEngine) error {
+func (e *PlStorageEngine) writeEngineMasterFile() error {
 	data, err := json.Marshal(e)
 	if err != nil {
 		return err
