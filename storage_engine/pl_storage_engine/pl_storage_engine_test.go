@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/moutansos/pinelakedb/storage_engine"
+
 	"github.com/oklog/ulid"
 )
 
@@ -21,7 +23,7 @@ func generateTestDirectory() (dir string, err error) {
 	}
 	return dir, nil
 }
-func TestWriteEngineMasterFile(t *testing.T) {
+func TestWriteEngineMasterFileSync(t *testing.T) {
 	dir, err := generateTestDirectory()
 	if err != nil {
 		t.Error(err)
@@ -30,9 +32,25 @@ func TestWriteEngineMasterFile(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	err = eng.writeEngineMasterFile()
+	err = eng.Initialize()
 	if err != nil {
 		t.Error(err)
 	}
 	//TODO: Check to make sure the file contains what it should
+}
+
+func TestWriteEngineMasterFileAsync(t *testing.T) {
+	dir, err := generateTestDirectory()
+	if err != nil {
+		t.Error(err)
+	}
+	eng, err := NewPlStorageEngine(dir)
+	if err != nil {
+		t.Error(err)
+	}
+
+	//Create an initialization execution step
+	step := storage_engine.NewInitializationExecutionStep(eng)
+	eng.AddStepToQueue(step)
+	//TODO: Confirm results
 }
